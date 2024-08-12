@@ -28,7 +28,6 @@ section_model, tokenizer, qa_model = load_models()
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 section_model.to(device)
 
-# Custom dataset class
 class CustomDataset(Dataset):
     def __init__(self, questions, tokenizer, max_len):
         self.questions = questions
@@ -57,7 +56,6 @@ class CustomDataset(Dataset):
             'attention_mask': encoding['attention_mask'].flatten()
         }
 
-# Predict section and control headings
 def predict_section_control(model, tokenizer, question, max_len=128):
     model.eval()
     encoding = tokenizer.encode_plus(
@@ -115,12 +113,11 @@ def classify_question(question, section_heading, control_heading, df):
     answers, probabilities = qa_model.predict(to_predict, n_best_size=2)
     if answers[0]['answer'] == '':
         return 'unanswerable'
-    elif probabilities[0]['probability'][0] > 0.45:
+    elif probabilities[0]['probability'][0] > 0.6:
         return 'answerable'
     else:
         return 'ambiguous'
 
-# Streamlit App
 st.title('Question Classification and Answering')
 
 uploaded_file = st.file_uploader("Upload your Excel file", type=["xlsx"])
@@ -144,7 +141,6 @@ if uploaded_file:
     reverse_section_label_mapping = dict(enumerate(section_label_encoder.classes_))
     reverse_control_label_mapping = dict(enumerate(control_label_encoder.classes_))
 
-    # Predict section and control
     q_df[['section_pred', 'control_pred']] = q_df['question'].apply(
         lambda x: predict_section_control(section_model, tokenizer, x)).tolist()
 
