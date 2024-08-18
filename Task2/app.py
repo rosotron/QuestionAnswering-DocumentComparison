@@ -155,7 +155,7 @@ if uploaded_file_v1 is not None and uploaded_file_final is not None:
         plt.figure(figsize=(10, 6))
         merged_df['Similarity_Category'].value_counts().plot(kind='bar')
         plt.title('Distribution of Similarity Categories')
-        plt.xlabel('Change Category')
+        plt.xlabel('Similarity Category')
         plt.ylabel('Count')
         st.pyplot(plt)
 
