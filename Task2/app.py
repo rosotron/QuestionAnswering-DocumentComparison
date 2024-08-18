@@ -1,13 +1,4 @@
-import subprocess
-import sys
 
-# Function to install packages
-def install(package):
-    subprocess.check_call([sys.executable, "-m", "pip", "install", package])
-
-# Installing necessary packages
-install('streamlit')
-install('sentence-transformers')
 
 import streamlit as st
 import pandas as pd
