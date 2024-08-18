@@ -15,7 +15,7 @@ Task 2
 
 Step 1: pip install -r requirements.txt
 
-Step 2: If you want to run jupyter notebook can you the text_comparison.ipynb
+Step 2: If you want to run jupyter notebook can you the final.ipynb
 
 Step 3: Run streamlit run app.py for inference UI
 
