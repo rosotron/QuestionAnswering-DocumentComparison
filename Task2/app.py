@@ -100,7 +100,7 @@ def analyze_change_type(a, b):
     common_words = a_words.intersection(b_words)
 
     if len(common_words) / max(len(a_words), len(b_words)) > 0.9:
-        return 'Mainly Format/Grammar'
+        return 'Mainly Format/Grammar or No Change at all'
     else:
         return 'Content Change'
 
