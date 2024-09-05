@@ -118,7 +118,8 @@ if uploaded_file_v1 is not None and uploaded_file_final is not None:
     cols = list(df_v1)[:2]
     df_v1[cols] = df_v1[cols].ffill(axis=0)
     df_v1['Original ID'] = df_v1['Original ID'].astype(str)
-
+    df_v1.loc[df_v1["Question Text"] == df_final[df_final["Original ID"] == "8.10"]["Question Text"].values[0], "Original ID"] = "8.10"
+    
     st.subheader('Version 1')
     st.dataframe(df_v1.head())
 
@@ -202,9 +203,16 @@ if uploaded_file_v1 is not None and uploaded_file_final is not None:
 
     if analysis_option == "Questions with Significant Changes":
         merged_df = calculate_similarity_score(df_v1, df_final, similarity_ratio)
-        significant_changes = df_v1[merged_df['Similarity_Score'] < 0.5]
+        significant_changes = merged_df[merged_df['Similarity_Score'] < 0.5]
         st.subheader('Questions with Significant Changes')
-        for idx, row in significant_changes.iterrows():
-            st.write(f"\n**Question {idx + 1}:**")
-            st.write(f"**Version 1:** {row['Answer']}")
-            st.write(f"**Final Version:** {df_final.loc[idx, 'Answer']}")
+        for _, row in significant_changes.iterrows():
+            original_id = row['Original ID']  
+            v1_row = df_v1[df_v1['Original ID'] == original_id]
+            final_row = df_final[df_final['Original ID'] == original_id]
+            if not v1_row.empty:
+                v1_answer = v1_row.iloc[0]['Answer'] 
+            if not final_row.empty:
+                final_answer = final_row.iloc[0]['Answer']  
+            st.write(f"\n**Question {original_id}:**")
+            st.write(f"**Version 1:** {v1_answer}")
+            st.write(f"**Final Version:** {final_answer}")
