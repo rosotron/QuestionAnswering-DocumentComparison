@@ -94,13 +94,15 @@ def analyze_change_type(a, b):
         return 'Added in Final'
     elif not pd.isna(a) and pd.isna(b):
         return 'Removed in Final'
-
+    if str(a).strip().lower() == str(b).strip().lower():
+        return 'No Change'
+        
     a_words = set(word_tokenize(str(a).lower()))
     b_words = set(word_tokenize(str(b).lower()))
     common_words = a_words.intersection(b_words)
 
     if len(common_words) / max(len(a_words), len(b_words)) > 0.9:
-        return 'Mainly Format/Grammar or No Change at all'
+        return 'Mainly Format/Grammar'
     else:
         return 'Content Change'
 
